@@ -26,6 +26,8 @@ public class PDFComponent extends JPanel {
   private InputStream currentIs;
   private int currentPage = 1;
 
+  private int currentScaling = 5;
+  private final float[] scalings = { 0.01f, 0.1f, 0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 4.0f, 7.5f, 10.0f };
   private final JLabel pageCounter1 = new JLabel("Page ");
   private final JTextField pageCounter2 = new JTextField(4);
 
@@ -112,7 +114,7 @@ public class PDFComponent extends JPanel {
 
   private Component[] initChangerPanel() {
 
-    final Component[] list = new Component[11];
+    final Component[] list = new Component[14];
 
     /** back to page 1 */
     final JButton start = new JButton();
@@ -319,7 +321,58 @@ public class PDFComponent extends JPanel {
         }
       }
     });
+    final JButton zI = new JButton();
+    zI.setBorderPainted(false);
+    final URL zIImage = getClass().getResource("/org/jpedal/examples/viewer/res/plus.gif");
+    zI.setIcon(new ImageIcon(zIImage));
+    zI.setToolTipText("Zoom in");
+    list[11] = zI;
 
+    zI.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        if (currentScaling < scalings.length - 1) {
+          currentScaling ++;
+          pdfDecoder.setPageParameters(scalings[currentScaling], currentPage);
+
+          repaint();
+        }
+      }
+    });
+
+    final JButton zoom = new JButton();
+    zoom.setBorderPainted(false);
+    final URL zoomImage = getClass().getResource("/org/jpedal/examples/viewer/res/minus.gif");
+    zoom.setIcon(new ImageIcon(zoomImage));
+    zoom.setToolTipText("Zoom out");
+    list[12] = zoom;
+    zoom.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        if (currentScaling > 0) {
+          currentScaling--;
+          pdfDecoder.setPageParameters(scalings[currentScaling], currentPage);
+
+          repaint();
+        }
+      }
+    });
+
+    final JButton p = new JButton();
+    p.setBorderPainted(false);
+    final URL pImage = getClass().getResource("/org/jpedal/examples/viewer/res/properties.gif");
+    p.setIcon(new ImageIcon(pImage));
+    p.setToolTipText("Properties");
+    list[13] = p;
+    p.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        final String p = pdfDecoder.getPDFVersion();
+        final int n = pdfDecoder.getPageCount();
+        JOptionPane.showMessageDialog(null, "\n PDF version is \t" + p + "\n Number of pages in PDF: \t" + n + "\n");
+      }
+
+    });
     return list;
   }
 
