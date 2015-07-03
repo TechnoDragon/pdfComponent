@@ -2,7 +2,6 @@ package co.uproot.pdf;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -122,7 +121,6 @@ public class PDFComponent extends JPanel {
     final URL startImage = getClass().getResource("/org/jpedal/examples/viewer/res/start.gif");
     start.setIcon(new ImageIcon(startImage));
     start.setToolTipText("Rewind to page 1");
-    // currentBar1.add(start);
     list[0] = start;
     start.addActionListener(new ActionListener() {
       @Override
